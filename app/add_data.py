@@ -41,6 +41,11 @@ def create_recipe(title, cookbook, author, difficulty, description, ingredients)
     return recipe
 
 
+def create_user_profile(user):
+    user_profile = UserProfile.objects.create(user=user)
+    return user_profile
+
+
 if __name__ == "__main__":
     User.objects.exclude(id=1).delete()
     Ingredient.objects.all().delete()
@@ -49,6 +54,10 @@ if __name__ == "__main__":
     user1 = create_user("Peter", "0000")
     user2 = create_user("Alice", "0000")
     user3 = create_user("John", "0000")
+
+    user_profile1 = create_user_profile(user1)
+    user_profile2 = create_user_profile(user2)
+    user_profile3 = create_user_profile(user3)
 
     # Create ingredients
     flour = create_ingredient("Flour")
