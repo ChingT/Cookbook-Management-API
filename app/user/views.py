@@ -1,8 +1,10 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
-from user_profile.serializers import UserSerializer
+from user.serializers import UserSerializer
+
+User = get_user_model()
 
 
 class ListUsersAPIView(GenericAPIView):

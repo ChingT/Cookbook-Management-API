@@ -1,8 +1,10 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from cookbook.models import Cookbook
 from ingredient.models import Ingredient
+
+User = get_user_model()
 
 
 class Recipe(models.Model):
