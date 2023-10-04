@@ -10,7 +10,6 @@ class Cookbook(models.Model):
     author = models.ForeignKey(
         to=User, on_delete=models.CASCADE, related_name="cookbooks"
     )
-    favourite_by_users = models.ManyToManyField(to=User, blank=True)
 
     def __str__(self):
         return f"Cookbook '{self.title}'"

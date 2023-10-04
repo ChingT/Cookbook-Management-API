@@ -6,6 +6,10 @@ from ingredient.views import (
 )
 
 urlpatterns = [
-    path("", ListCreateIngredientAPIView.as_view()),
-    path("<int:pk>/", GetUpdateDeleteIngredientAPIView.as_view()),
+    path("", ListCreateIngredientAPIView.as_view(), name="ingredient-list"),
+    path(
+        "<int:pk>/",
+        GetUpdateDeleteIngredientAPIView.as_view(),
+        name="ingredient-detail",
+    ),
 ]

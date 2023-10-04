@@ -1,11 +1,10 @@
 import os
 
-# Configure the Django settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.cookbook_management.settings")
 import django
 
+# Configure the Django settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.cookbook_management.settings")
 django.setup()
-
 from django.contrib.auth.models import User
 
 from cookbook.models import Cookbook
@@ -42,12 +41,9 @@ def create_recipe(title, cookbook, author, difficulty, description, ingredients)
     return recipe
 
 
-def add_favorite_recipe(recipe, user):
-    recipe.favourite_by_users.add(user)
-
-
-def add_favorite_cookbook(cookbook, user):
-    cookbook.favourite_by_users.add(user)
+def create_user_profile(user):
+    user_profile = UserProfile.objects.create(user=user)
+    return user_profile
 
 
 if __name__ == "__main__":
@@ -58,6 +54,10 @@ if __name__ == "__main__":
     user1 = create_user("Peter", "0000")
     user2 = create_user("Alice", "0000")
     user3 = create_user("John", "0000")
+
+    user_profile1 = create_user_profile(user1)
+    user_profile2 = create_user_profile(user2)
+    user_profile3 = create_user_profile(user3)
 
     # Create ingredients
     flour = create_ingredient("Flour")
@@ -116,16 +116,4 @@ if __name__ == "__main__":
         "Quick and simple omelette recipe.",
         [eggs, butter, salt, pepper],
     )
-
-    # Add favorite recipes and cookbooks for users
-    add_favorite_recipe(recipe1, user1)
-    add_favorite_recipe(recipe1, user3)
-    add_favorite_recipe(recipe2, user2)
-    add_favorite_recipe(recipe3, user1)
-    add_favorite_recipe(recipe4, user3)
-    add_favorite_cookbook(cookbook1, user1)
-    add_favorite_cookbook(cookbook1, user3)
-    add_favorite_cookbook(cookbook2, user2)
-    add_favorite_cookbook(cookbook2, user3)
-
     print("Test data added successfully!")
