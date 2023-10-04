@@ -9,7 +9,6 @@ django.setup()
 
 from cookbook.models import Cookbook
 from ingredient.models import Ingredient
-from registration_profile.models import RegistrationProfile
 from recipe.models import Recipe
 from django.contrib.auth import get_user_model
 
@@ -17,20 +16,17 @@ User = get_user_model()
 
 
 def create_user(username, password):
-    user = User.objects.create_user(username=username, password=password)
-    return user
+    return User.objects.create_user(
+        email=f"{username}@email.com", username=username, password=password
+    )
 
 
 def create_ingredient(name):
-    ingredient = Ingredient.objects.create(name=name)
-    return ingredient
+    return Ingredient.objects.create(name=name)
 
 
 def create_cookbook(title, author, description=""):
-    cookbook = Cookbook.objects.create(
-        title=title, author=author, description=description
-    )
-    return cookbook
+    return Cookbook.objects.create(title=title, author=author, description=description)
 
 
 def create_recipe(title, cookbook, author, difficulty, description, ingredients):
@@ -45,10 +41,6 @@ def create_recipe(title, cookbook, author, difficulty, description, ingredients)
     return recipe
 
 
-def create_registration_profile(user):
-    return RegistrationProfile.objects.create(user=user)
-
-
 if __name__ == "__main__":
     User.objects.exclude(id=1).delete()
     Ingredient.objects.all().delete()
@@ -57,10 +49,6 @@ if __name__ == "__main__":
     user1 = create_user("Peter", "0000")
     user2 = create_user("Alice", "0000")
     user3 = create_user("John", "0000")
-
-    registration_profile1 = create_registration_profile(user1)
-    registration_profile2 = create_registration_profile(user2)
-    registration_profile3 = create_registration_profile(user3)
 
     # Create ingredients
     flour = create_ingredient("Flour")
