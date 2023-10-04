@@ -5,11 +5,14 @@ import django
 # Configure the Django settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.cookbook_management.settings")
 django.setup()
-from django.contrib.auth.models import User
+
 
 from cookbook.models import Cookbook
 from ingredient.models import Ingredient
 from recipe.models import Recipe
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def create_user(username, password):
