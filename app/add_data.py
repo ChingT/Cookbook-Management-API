@@ -9,6 +9,7 @@ django.setup()
 
 from cookbook.models import Cookbook
 from ingredient.models import Ingredient
+from registration_profile.models import RegistrationProfile
 from recipe.models import Recipe
 from django.contrib.auth import get_user_model
 
@@ -44,9 +45,8 @@ def create_recipe(title, cookbook, author, difficulty, description, ingredients)
     return recipe
 
 
-def create_user_profile(user):
-    user_profile = UserProfile.objects.create(user=user)
-    return user_profile
+def create_registration_profile(user):
+    return RegistrationProfile.objects.create(user=user)
 
 
 if __name__ == "__main__":
@@ -58,9 +58,9 @@ if __name__ == "__main__":
     user2 = create_user("Alice", "0000")
     user3 = create_user("John", "0000")
 
-    user_profile1 = create_user_profile(user1)
-    user_profile2 = create_user_profile(user2)
-    user_profile3 = create_user_profile(user3)
+    registration_profile1 = create_registration_profile(user1)
+    registration_profile2 = create_registration_profile(user2)
+    registration_profile3 = create_registration_profile(user3)
 
     # Create ingredients
     flour = create_ingredient("Flour")

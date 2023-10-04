@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # own
     "user",
-    "user_profile",
+    "registration_profile",
     "recipe",
     "ingredient",
     "cookbook",
