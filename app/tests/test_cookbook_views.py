@@ -113,10 +113,12 @@ def test_create_cookbook(
     if expected_status == status.HTTP_201_CREATED:
         assert model.objects.count() == 1
         created_object = model.objects.get()
-        fields = resource_data.keys()
+        # The author of the cookbook is the user creating it.
+        fields = resource_data.keys() - {"author"}
         assert get_object_data(resource_data, fields) == get_object_data(
             created_object, fields
         )
+        assert created_object.author == user_fixture
 
 
 @pytest.mark.django_db

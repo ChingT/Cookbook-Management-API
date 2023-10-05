@@ -11,6 +11,10 @@ class ListCreateCookbookAPIView(ListCreateAPIView):
     serializer_class = CookbookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def perform_create(self, serializer):
+        # The author of the cookbook is the user creating it.
+        serializer.save(author=self.request.user)
+
 
 class GetUpdateDeleteCookbookAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Cookbook.objects.all()
