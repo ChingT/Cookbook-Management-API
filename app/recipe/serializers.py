@@ -36,4 +36,4 @@ class RecipeSerializer(serializers.ModelSerializer):
             "logged_in_user_favourite",
             "is_from_logged_in_user",
         ]
-        read_only_fields = ["author", "recipes"]
+        read_only_fields = ["author", "recipes", "favorite_by"]
