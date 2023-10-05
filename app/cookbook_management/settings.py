@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # 3rd party
     "django_extensions",
     "rest_framework",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -140,6 +141,7 @@ AUTH_USER_MODEL = "user.User"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -150,4 +152,15 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+}
+
+
+# DOCUMENTATION
+SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": True,  # Change settings to True to enable Django Login option
+    # "LOGIN_URL": "admin/",  # URL For Django Login
+    # "LOGOUT_URL": "admin/logout/",  # URL For Django Logout
+    "SECURITY_DEFINITIONS": {  # Allows usage of Access token to make requests on the docs.
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    },
 }
