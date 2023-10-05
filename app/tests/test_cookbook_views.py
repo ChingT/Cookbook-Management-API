@@ -1,19 +1,9 @@
-import pytest
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIClient
 
 from cookbook.models import Cookbook
 from cookbook.serializers import CookbookSerializer
-
-User = get_user_model()
-
-
-@pytest.fixture
-def client():
-    return APIClient()
+from fixtures import *
 
 
 @pytest.fixture
@@ -32,43 +22,12 @@ def model():
 
 
 @pytest.fixture
-def author() -> User:
-    return User.objects.create_user("author", email="author")
-
-
-@pytest.fixture
-def admin_user() -> User:
-    return User.objects.create_user("admin_user", email="admin_user", is_staff=True)
-
-
-@pytest.fixture
-def non_admin_user() -> User:
-    return User.objects.create_user("non_admin_user", email="non_admin_user")
-
-
-@pytest.fixture
-def anonymous_user() -> User:
-    return AnonymousUser()
-
-
-@pytest.fixture
 def resource_data(author) -> dict:
     return {
         "title": "Test title",
         "description": "Test description",
         "author": author,
     }
-
-
-@pytest.fixture
-def created_object(model, resource_data):
-    return model.objects.create(**resource_data)
-
-
-def get_object_data(source_object, fields) -> dict:
-    if isinstance(source_object, dict):
-        return {field: source_object[field] for field in fields}
-    return {field: getattr(source_object, field) for field in fields}
 
 
 @pytest.mark.django_db
@@ -79,8 +38,9 @@ def get_object_data(source_object, fields) -> dict:
     ],
 )
 def test_get_all_cookbooks(
-    model, list_viewname, client, user, created_object, expected_status, request
+    model, list_viewname, client, user, resource_data, expected_status, request
 ):
+    created_object = create_object(model, resource_data)
     user_fixture = request.getfixturevalue(user)
     client.force_authenticate(user=user_fixture)
     response = client.get(reverse(list_viewname))
@@ -129,8 +89,9 @@ def test_create_cookbook(
     ],
 )
 def test_get_cookbook(
-    model, detail_viewname, client, user, created_object, expected_status, request
+    model, detail_viewname, client, user, resource_data, expected_status, request
 ):
+    created_object = create_object(model, resource_data)
     user_fixture = request.getfixturevalue(user)
     client.force_authenticate(user=user_fixture)
     response = client.get(reverse(detail_viewname, args=[created_object.id]))
@@ -150,8 +111,9 @@ def test_get_cookbook(
     ],
 )
 def test_update_cookbook(
-    model, detail_viewname, client, user, created_object, expected_status, request
+    model, detail_viewname, client, user, resource_data, expected_status, request
 ):
+    created_object = create_object(model, resource_data)
     user_fixture = request.getfixturevalue(user)
     client.force_authenticate(user=user_fixture)
     updated_data = {"title": "Updated title"}
@@ -180,8 +142,9 @@ def test_update_cookbook(
     ],
 )
 def test_delete_cookbook(
-    model, detail_viewname, client, user, created_object, expected_status, request
+    model, detail_viewname, client, user, resource_data, expected_status, request
 ):
+    created_object = create_object(model, resource_data)
     user_fixture = request.getfixturevalue(user)
     client.force_authenticate(user=user_fixture)
     response = client.delete(reverse(detail_viewname, args=[created_object.id]))
