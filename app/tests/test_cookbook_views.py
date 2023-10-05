@@ -132,6 +132,29 @@ def test_update_cookbook(
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize("user", ["author", "admin_user"])
+def test_cannot_update_author(
+    model, detail_viewname, client, user, resource_data, request
+):
+    created_object = create_object(model, resource_data)
+    user_fixture = request.getfixturevalue(user)
+    client.force_authenticate(user=user_fixture)
+    updated_data = {"title": "Updated title", "author": user_fixture.id}
+    response = client.patch(
+        reverse(detail_viewname, args=[created_object.id]), updated_data
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert model.objects.count() == 1
+    updated_object = model.objects.get()
+    fields = updated_data.keys() - {"author"}
+    assert get_object_data(updated_data, fields) == get_object_data(
+        updated_object, fields
+    )
+    # Cannot update the author
+    assert updated_object.author == resource_data["author"]
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "user, expected_status",
     [

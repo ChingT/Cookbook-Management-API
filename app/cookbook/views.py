@@ -20,3 +20,7 @@ class GetUpdateDeleteCookbookAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Cookbook.objects.all()
     serializer_class = CookbookSerializer
     permission_classes = [IsAuthor | IsAdmin | ReadOnly]
+
+    def perform_update(self, serializer):
+        # Cannot change the author
+        serializer.save(author=serializer.instance.author)

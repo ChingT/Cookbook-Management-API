@@ -20,3 +20,7 @@ class GetUpdateDeleteRecipeAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = [IsAuthor | IsAdmin | ReadOnly]
+
+    def perform_update(self, serializer):
+        # Cannot change the author
+        serializer.save(author=serializer.instance.author)
