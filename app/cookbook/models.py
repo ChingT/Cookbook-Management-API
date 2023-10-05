@@ -12,6 +12,9 @@ class Cookbook(models.Model):
     author = models.ForeignKey(
         to=User, on_delete=models.CASCADE, related_name="cookbooks"
     )
+    favorite_by = models.ManyToManyField(
+        to=User, related_name="favorite_cookbooks", blank=True
+    )
 
     def __str__(self):
         return f"Cookbook '{self.title}'"

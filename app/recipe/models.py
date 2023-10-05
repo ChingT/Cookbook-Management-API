@@ -25,6 +25,9 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         to=User, on_delete=models.CASCADE, related_name="recipes"
     )
+    favorite_by = models.ManyToManyField(
+        to=User, related_name="favorite_recipes", blank=True
+    )
 
     def __str__(self):
         return f"Recipe '{self.title}'"
