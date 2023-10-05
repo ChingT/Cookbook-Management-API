@@ -23,23 +23,19 @@ from rest_framework_simplejwt.views import (
 )
 
 
-class AuthViews:
-    """Class to encapsulate authentication-related views."""
-
-    @classmethod
-    def as_view(cls):
-        return [
-            path("", TokenObtainPairView.as_view(), name="token_obtain"),
-            path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-            path("verify/", TokenVerifyView.as_view(), name="token_verify"),
-        ]
-
-
-urlpatterns = [
-    path("api/admin/", admin.site.urls),
-    path("api/users/", include("user.urls")),
-    path("api/cookbooks/", include("cookbook.urls")),
-    path("api/ingredients/", include("ingredient.urls")),
-    path("api/recipes/", include("recipe.urls")),
-    path("api/auth/", include(AuthViews.as_view())),
+auth_urlpatterns = [
+    path("", TokenObtainPairView.as_view(), name="token_obtain"),
+    path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("verify/", TokenVerifyView.as_view(), name="token_verify"),
 ]
+
+api_urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("users/", include("user.urls")),
+    path("cookbooks/", include("cookbook.urls")),
+    path("ingredients/", include("ingredient.urls")),
+    path("recipes/", include("recipe.urls")),
+    path("auth/", include(auth_urlpatterns)),
+]
+
+urlpatterns = [path("api/", include(api_urlpatterns))]
