@@ -87,7 +87,7 @@ def test_get_all_ingredients(
     [
         ("admin_user", status.HTTP_201_CREATED),
         ("non_admin_user", status.HTTP_201_CREATED),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_create_ingredient(
@@ -134,7 +134,7 @@ def test_get_ingredient(
     [
         ("admin_user", status.HTTP_200_OK),
         ("non_admin_user", status.HTTP_403_FORBIDDEN),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_update_ingredient(
@@ -163,7 +163,7 @@ def test_update_ingredient(
     [
         ("admin_user", status.HTTP_204_NO_CONTENT),
         ("non_admin_user", status.HTTP_403_FORBIDDEN),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_delete_ingredient(

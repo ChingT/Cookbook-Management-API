@@ -96,7 +96,7 @@ def test_get_all_cookbooks(
     [
         ("admin_user", status.HTTP_201_CREATED),
         ("non_admin_user", status.HTTP_201_CREATED),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),  # TODO: why not 401?
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_create_cookbook(
@@ -146,7 +146,7 @@ def test_get_cookbook(
         ("author", status.HTTP_200_OK),
         ("admin_user", status.HTTP_200_OK),
         ("non_admin_user", status.HTTP_403_FORBIDDEN),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_update_cookbook(
@@ -176,7 +176,7 @@ def test_update_cookbook(
         ("author", status.HTTP_204_NO_CONTENT),
         ("admin_user", status.HTTP_204_NO_CONTENT),
         ("non_admin_user", status.HTTP_403_FORBIDDEN),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_delete_cookbook(

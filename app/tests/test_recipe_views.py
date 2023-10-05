@@ -104,7 +104,7 @@ def test_get_all_recipes(
     [
         ("admin_user", status.HTTP_201_CREATED),
         ("non_admin_user", status.HTTP_201_CREATED),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_create_recipe(
@@ -152,7 +152,7 @@ def test_get_recipe(
         ("author", status.HTTP_200_OK),
         ("admin_user", status.HTTP_200_OK),
         ("non_admin_user", status.HTTP_403_FORBIDDEN),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_update_recipe(
@@ -182,7 +182,7 @@ def test_update_recipe(
         ("author", status.HTTP_204_NO_CONTENT),
         ("admin_user", status.HTTP_204_NO_CONTENT),
         ("non_admin_user", status.HTTP_403_FORBIDDEN),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_delete_recipe(

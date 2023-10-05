@@ -67,7 +67,7 @@ def get_object_data(source_object, fields) -> dict:
     [
         ("admin_user", status.HTTP_200_OK),
         ("non_admin_user", status.HTTP_200_OK),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_get_all_users(
@@ -90,7 +90,7 @@ def test_get_all_users(
     [
         ("admin_user", status.HTTP_201_CREATED),
         ("non_admin_user", status.HTTP_201_CREATED),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_create_user(
@@ -135,7 +135,7 @@ def test_get_user(
     [
         ("admin_user", status.HTTP_200_OK),
         ("non_admin_user", status.HTTP_403_FORBIDDEN),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_update_user(
@@ -164,7 +164,7 @@ def test_update_user(
     [
         ("admin_user", status.HTTP_204_NO_CONTENT),
         ("non_admin_user", status.HTTP_403_FORBIDDEN),
-        ("anonymous_user", status.HTTP_403_FORBIDDEN),
+        ("anonymous_user", status.HTTP_401_UNAUTHORIZED),
     ],
 )
 def test_delete_user(
