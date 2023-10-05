@@ -24,7 +24,7 @@ def model():
 
 @pytest.fixture
 def resource_data() -> dict:
-    return {"username": "test", "email": "test@email.com", "password": "test"}
+    return {"username": "test", "email": "test@email.com"}
 
 
 def create_user(resource_data):
