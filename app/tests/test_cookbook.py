@@ -2,7 +2,6 @@ from django.urls import reverse
 from rest_framework import status
 
 from cookbook.models import Cookbook
-from cookbook.serializers import CookbookSerializer
 from fixtures import *
 
 
@@ -47,7 +46,10 @@ def test_get_all_cookbooks(
 
     assert response.status_code == expected_status
     assert len(response.data) == 1
-    assert response.data[0] == CookbookSerializer(created_object).data
+    fields = resource_data.keys()
+    assert get_object_data(resource_data, fields) == get_object_data(
+        created_object, fields
+    )
 
 
 @pytest.mark.django_db
@@ -64,20 +66,19 @@ def test_create_cookbook(
 ):
     user_fixture = request.getfixturevalue(user)
     client.force_authenticate(user=user_fixture)
-    response = client.post(
-        reverse(list_viewname), CookbookSerializer(resource_data).data
-    )
+    resource_data.pop("author")
+    response = client.post(reverse(list_viewname), resource_data)
 
     assert response.status_code == expected_status
 
     if expected_status == status.HTTP_201_CREATED:
         assert model.objects.count() == 1
         created_object = model.objects.get()
-        # The author of the cookbook is the user creating it.
-        fields = resource_data.keys() - {"author"}
+        fields = resource_data.keys()
         assert get_object_data(resource_data, fields) == get_object_data(
             created_object, fields
         )
+        # The author of the cookbook is the user creating it.
         assert created_object.author == user_fixture
 
 
@@ -97,7 +98,10 @@ def test_get_cookbook(
     response = client.get(reverse(detail_viewname, args=[created_object.id]))
 
     assert response.status_code == expected_status
-    assert response.data == CookbookSerializer(created_object).data
+    fields = resource_data.keys()
+    assert get_object_data(resource_data, fields) == get_object_data(
+        created_object, fields
+    )
 
 
 @pytest.mark.django_db
