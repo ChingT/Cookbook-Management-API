@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework.generics import (
     GenericAPIView,
     ListCreateAPIView,
@@ -12,9 +13,27 @@ from user.permissions import IsAdmin, IsAuthor, ReadOnly
 
 
 class ListCreateRecipeAPIView(ListCreateAPIView):
-    queryset = Recipe.objects.all()
+    """
+    get:
+    Returns all recipes if no search parameter is given.
+    If a search parameter is given, it returns all recipes that contain it in the
+    title or description.
+
+    post:
+    Creates a new recipe and returns it.
+    """
+
     serializer_class = RecipeSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Recipe.objects.all()
+        if search_string := self.request.query_params.get("search"):
+            queryset = queryset.filter(
+                Q(title__icontains=search_string)
+                | Q(description__icontains=search_string)
+            )
+        return queryset
 
     def perform_create(self, serializer):
         # The author of the recipe is the user creating it.
@@ -22,6 +41,17 @@ class ListCreateRecipeAPIView(ListCreateAPIView):
 
 
 class GetUpdateDeleteRecipeAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    get:
+    Returns a recipe based on the given id.
+
+    patch:
+    Partially updates and returns a recipe based on the given id.
+
+    delete:
+    Deletes a recipe based on the given id and return no content status 204.
+    """
+
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = [IsAuthor | IsAdmin | ReadOnly]
@@ -32,6 +62,11 @@ class GetUpdateDeleteRecipeAPIView(RetrieveUpdateDestroyAPIView):
 
 
 class ToggleFavouriteRecipeAPIView(GenericAPIView):
+    """
+    patch:
+    Toggle starring recipe by the logged-in user.
+    """
+
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     lookup_field = "id"
